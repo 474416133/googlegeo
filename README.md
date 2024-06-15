@@ -60,7 +60,7 @@
 
   ```
   cd babikill
-  pip install -r requirements.txt 
+  pip install -r requirements/dev.txt 
   
   # 安装依赖库后，需要安装 playwright相关浏览器，参考https://playwright.dev/python/docs/intro
   playwright install
