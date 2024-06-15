@@ -10,8 +10,8 @@
 from sqlalchemy import create_engine
 from playwright.async_api import async_playwright
 
-from biubiu.application import Application
-from example.models import Base, URL, to_dict
+from biubiu.application import Application, URL
+from example.models import Base, to_dict
 from example.handlers import scrapy_google_map
 
 

@@ -15,17 +15,6 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import attributes
 
 
-class URL:
-
-    def __init__(self, url):
-        self.url = url
-
-    def __str__(self):
-        return self.url
-
-    __repr__ = __str__
-
-
 def to_dict(model, field_names=None):
     """
     model to dict

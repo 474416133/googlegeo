@@ -28,6 +28,16 @@ class ErrorStack:
         self.tb = tb
 
 
+class URL:
+
+    def __init__(self, url):
+        self.url = url
+
+    def __str__(self):
+        return self.url
+
+    __repr__ = __str__
+
 
 class Application:
 
@@ -38,6 +48,7 @@ class Application:
                                 task
          redis/rabbitMQ/kaffa/  ===>    application._queue  ===>  handler(app, task)
                                           返回结果重新放进队列  <==
+
         :param scope_context: scope 上下文管理器，主要用于应用启动前及关闭前做的一些工作，比如初始化数据库连接等
         一般定义如下
         async def _scope(app):
@@ -134,7 +145,6 @@ class Application:
                 await _handle_ret(ret)
 
 
-
     def _match(self, task):
         """
         根据task 匹配对应的处理器
@@ -149,3 +159,9 @@ class Application:
                     break
         return handler
 
+
+
+class PikaConsumerStarter:
+    """
+    参考：https://pika.readthedocs.io/en/stable/intro.html#io-and-event-looping
+    """
