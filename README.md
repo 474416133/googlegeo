@@ -29,10 +29,11 @@
 
 ### 四 使用的技术栈  
 
-- python 3
+- python 3.8+ (作者的版本是3.11)
 - asyncio
 - playwright
 - SQLAlchemy 
+- pika(RabbitMQ)
 
 ### 五 开发有关  
 
@@ -77,8 +78,32 @@
   ```
 
   
+  
+- 关于如何实现分布式  
 
+  - 1 需要创建实现loop异步方法的一个类，参考 $项目目录/biubiu/starters.py 例如： 
 
+    ```
+    class PikaConsumerStarter:
+         async def loop():
+              # 
+              pass
+    ```
+
+    
+
+  - 2 初始化，并调用 application对象的add_starter方法加到application对象里 
+
+    ```
+    app = Application(worker_id='test-01', scope_context_manager=startup)
+    # 分布式Starter
+    pika_starter = PikaConsumerStarter('amqp://guest:guest@localhost:5672/%2F', app)
+    app.add_starter(pika_starter)
+    ```
+
+    
+
+  
 
 ### 六 效果图  
 

@@ -65,6 +65,7 @@ class Application:
         self._starters = starters or []
         self._scope_context_manager = contextlib.asynccontextmanager(scope_context_manager or self._default_scope_context_manager)
         self._handlers = {}
+        self.put = self._queue.put_nowait
 
 
     def add_starter(self, starter):
@@ -91,6 +92,7 @@ class Application:
     def handle(self, match_cls):
         def _wrap(handler):
             self.add_handler(match_cls, handler)
+            return handler
         return _wrap
 
 
@@ -103,13 +105,14 @@ class Application:
 
 
     async def _start(self):
-        tasks = [starter(self) for starter in self._starters]
+        tasks = [starter.loop() for starter in self._starters]
         tasks.insert(0, self._loop())
         await asyncio.gather(*tasks)
 
 
     def run(self, url=None):
-        self._queue.put_nowait(url)
+        if url:
+            self.put(url)
         asyncio.run(self._start())
 
 

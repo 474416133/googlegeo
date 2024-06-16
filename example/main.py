@@ -11,6 +11,7 @@ from sqlalchemy import create_engine
 from playwright.async_api import async_playwright
 
 from biubiu.application import Application, URL
+from biubiu.starters import PikaConsumerStarter
 from example.models import Base, to_dict
 from example.handlers import scrapy_google_map
 
@@ -25,8 +26,13 @@ async def startup(app):
     await app.browser.close()
 
 
+
 app = Application(worker_id='test-01', scope_context_manager=startup)
 app.add_handler(URL, scrapy_google_map)
+
+# 分布式Starter
+# pika_starter = PikaConsumerStarter('amqp://guest:guest@localhost:5672/%2F', app)
+# app.add_starter(pika_starter)
 
 
 @app.handle(Base)
@@ -39,4 +45,6 @@ async def save_result(app, task):
 
 
 if __name__ == '__main__':
+    # 如果对接第三方消息中间件，则run不需要参数
+    # app.run()
     app.run(URL('https://www.google.com/maps/search/company/@-46,25.28,3z?authuser=0&entry=ttu'))
